@@ -1,0 +1,81 @@
+﻿@page "/weather"
+@attribute [StreamRendering]
+
+<PageTitle>Gesamtansicht</PageTitle>
+
+<h1>Gesamtansicht</h1>
+
+<p>Alle verfügbaren Räume</p>
+
+@if (rooms == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+               <th>Room Number</th>
+               <th>Type</th>
+               <th>Capacity</th>
+               <th>Occupied</th>
+               <th>Cleaned</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var room in rooms)
+            {
+                <tr>
+                    <td class="nav-item px-3">
+                        <NavLink class="nav-link" href="detail/101">
+                            <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> @room.number
+                        </NavLink>
+                    </td>
+                    <td>@room.Type</td>
+                    <td>@room.Capacity</td>
+                    <td>@room.Occupied</td>
+                    <td>@room.Cleaned</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    /*private WeatherForecast[]? forecasts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Simulate asynchronous loading to demonstrate streaming rendering
+        await Task.Delay(500);
+
+        var startDate = DateOnly.FromDateTime(DateTime.Now);
+        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
+        forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        {
+            Date = startDate.AddDays(index),
+            TemperatureC = Random.Shared.Next(-20, 55),
+            Summary = summaries[Random.Shared.Next(summaries.Length)]
+        }).ToArray();
+    }
+
+    private class WeatherForecast
+    {
+        public DateOnly Date { get; set; }
+        public int TemperatureC { get; set; }
+        public string? Summary { get; set; }
+        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    }*/
+    private Room[]? rooms;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(500);
+        
+        //TODO get the rooms
+        rooms = new[] {new Room(102, "single", 2, false, false)};
+        
+    }
+
+}

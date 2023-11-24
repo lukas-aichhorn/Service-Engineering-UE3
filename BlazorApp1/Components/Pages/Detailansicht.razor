@@ -1,0 +1,63 @@
+﻿@page "/detail/{navNr}"
+@attribute [StreamRendering]
+
+<PageTitle>Detail</PageTitle>
+
+<h1>Detailansicht</h1>
+
+<p>Detailansicht des Raum</p>
+
+@if (room == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Room Number</th>
+            <th>Type</th>
+            <th>Capacity</th>
+            <th>Occupied</th>
+            <th>Cleaned</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>@room.number</td>
+            <td>@room.Type</td>
+            <td>@room.Capacity</td>
+            <td>@room.Occupied</td>
+            <td>@room.Cleaned</td>
+        </tr>
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public string navNr{ get; set; }
+
+    private string path = "http://localhost:8081/hotelintranet/getRoom/";
+    
+    Room room;
+
+    static HttpClient client = new HttpClient(); 
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(500);
+        room = await getRoom(Convert.ToInt32(navNr));
+    }
+    
+    private async Task<Room> getRoom(int id)
+    {
+        HttpResponseMessage response = await client.GetAsync($"{path}{id}");
+        string result = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(result);
+        Room room = JsonConvert.DeserializeObject<Room>(result);
+        return room;
+    }
+
+}
